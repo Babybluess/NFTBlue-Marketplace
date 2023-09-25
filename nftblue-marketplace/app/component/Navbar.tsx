@@ -1,5 +1,7 @@
+'use client'
 import React from 'react'
 import Link from 'next/link'
+import ConnectMetamask from './../../utils/ConnectMatamask'
 
 function Navbar() {
   return (
@@ -13,7 +15,7 @@ function Navbar() {
             <Link href={""}>Interviews</Link>
         </div>
         <div className=' bg-white text-black rounded-2xl p-3 font-semibold hover:bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:text-[#75e94b]'>
-            <button>Connect the wallet</button>
+            <ConnectMetamask/>
         </div>
     </div>
   )
