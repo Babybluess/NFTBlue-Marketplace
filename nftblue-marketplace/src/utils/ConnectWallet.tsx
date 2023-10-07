@@ -28,7 +28,6 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
   const [address, setAddress] = useState<string>();
   const [loading, setLoading] = useState(false);
 
- //const dispatch = useDispatch();
 
   useEffect(() => {
     const web3modal = new Web3Modal();
@@ -39,12 +38,6 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
 
   const connectWallet = async () => {
       setLoading(true);
-      // dispatch({
-      //   type: types.orderTypes.UPDATED_LOADING,
-      //   data:{
-      //     isLoading: true
-      //   }
-      // })
       try {
           const web3modal = new Web3Modal({ cacheProvider: true });
           const instance = await web3modal.connect();
@@ -57,24 +50,10 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
           
           setSigner(signer);
           setAddress(address);
-          // dispatch ({
-          //   type: types.userTypes.UPDATED_USER_DATA,
-          //   data: {
-          //     address: address,
-          //     balance: balanceToEth,
-          //     isConnect: true
-          //   }
-          // })
         } catch (e) {
             console.log(e);
         }
         setLoading(false);
-    //     dispatch({
-    //       type: types.orderTypes.UPDATED_LOADING,
-    //       data:{
-    //         isLoading: false
-    //       }
-    //     })
     };
 
     const contextValue = { signer, address, loading, connectWallet };

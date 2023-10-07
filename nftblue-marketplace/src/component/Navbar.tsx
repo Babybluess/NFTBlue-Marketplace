@@ -11,15 +11,7 @@ import * as types from '../../scripts/types/types'
 import ConnectButton from './ConnectButton'
 
 function Navbar() {
-  // const dispath = useDispatch();
-  // dispath ({
-  //           type: types.userTypes.UPDATED_USER_DATA,
-  //           data: {
-  //             addressWallet: address,
-  //             balance: 0,
-  //             isConnect: true
-  //           }
-  //         })
+  const {address} = useSigner()
   return (
     <div className='w-[95%] flex justify-between text-white items-center'>
         <span className=' font-bold text-xl'>NFT&#39;Blue</span>
@@ -29,7 +21,13 @@ function Navbar() {
             <Link to='roadmap' smooth={true} duration={1000} className=' cursor-pointer'>Roadmaps</Link>
             <Link to='transaction' smooth={true} duration={1000} className=' cursor-pointer'>Transaction</Link>
             <Link to='interviews' smooth={true} duration={1000} className=' cursor-pointer'>Interviews</Link>
-            <Links href="/My_Collection" className=' cursor-pointer'>Our Collection</Links>
+            {
+              address != undefined 
+              ?
+              <Links href="/My_Collection" className=' cursor-pointer'>Our Collection</Links>
+              : 
+              ''
+            }
         </div>
         <div className=' bg-white text-black rounded-2xl p-3 font-semibold hover:bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:text-[#75e94b]'>
           <ConnectButton/>

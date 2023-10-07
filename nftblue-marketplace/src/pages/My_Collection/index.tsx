@@ -5,6 +5,7 @@ import { AbstractNFT } from '../../component/constants/NFT';
 import Web3 from 'web3';
 import 'ethers'
 import Layout from '../../component/Layout'
+import UpdateImage from '@/src/component/UpdateImage';
 
 
 const MyCollection = () => {
@@ -15,10 +16,9 @@ const MyCollection = () => {
       <div className=' w-[99vw] h-[900px] flex flex-col bg-white'>
         <p onClick={() => backClick()} className=' absolute left-5 top-5 hover:-translate-x-2  w-[40px] h-[40px] bg-[#E2EAB0] rounded-xl flex justify-center items-center'>&#8592;</p>
         <div className=' w-full h-[500px] bg-white' >
-            <img src="/images/monkey-nft-v7.jpg" className=' w-full h-full bg-no-repeat bg-center object-cover' alt="" />
+            <UpdateImage name='bg'/>
             <div className=' flex w-[200px] h-[200px] rounded-lg translate-x-32 -translate-y-32 border-[5px] border-[#2FAEAC]'>
-              <img className=' object-cover h-full rounded-sm' src="/images/desktop-wallpaper-nft-monkey.jpg" alt="" />
-              <span className=' text-black font-bold text-5xl px-[20px] flex items-end'></span>
+              <UpdateImage name=''/>
             </div>
         </div>
         <div className='w-full px-[5%] py-[8%] flex flex-col gap-20 justify-center items-center bg-white'>
