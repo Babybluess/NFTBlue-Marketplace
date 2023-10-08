@@ -66,7 +66,6 @@ const ConnectMatamask = () => {
       console.log("Please install MetaMask");
     }
   };
-  
   // const signerAddress = createContext(walletAddress);
   // const signerLoading = createContext(loading);
   

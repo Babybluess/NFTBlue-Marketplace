@@ -6,18 +6,21 @@ import Web3 from 'web3';
 import 'ethers'
 import Layout from '../../component/Layout'
 import UpdateImage from '@/src/component/UpdateImage';
+import useSigner from '@/src/utils/ConnectWallet';
 
 
 const MyCollection = () => {
+    const { address } = useSigner()
+    console.log("address", address)
   const backClick = () =>{
 		window.location.href ='/'
 	}
   return (
-      <div className=' w-[99vw] h-[900px] flex flex-col bg-white'>
+      <div className=' w-[99vw] h-[900px] gap-20 flex flex-col bg-white'>
         <p onClick={() => backClick()} className=' absolute left-5 top-5 hover:-translate-x-2  w-[40px] h-[40px] bg-[#E2EAB0] rounded-xl flex justify-center items-center'>&#8592;</p>
         <div className=' w-full h-[500px] bg-white' >
             <UpdateImage name='bg'/>
-            <div className=' flex w-[200px] h-[200px] rounded-lg translate-x-32 -translate-y-32 border-[5px] border-[#2FAEAC]'>
+            <div className=' flex w-[500px] h-[250px] gap-2 items-end translate-x-32 -translate-y-40'>
               <UpdateImage name=''/>
             </div>
         </div>

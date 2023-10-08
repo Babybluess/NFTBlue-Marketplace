@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./nft.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -116,8 +115,11 @@ contract Marketplace is ReentrancyGuard {
         return marketItemId;
     }
 
-    function getAddressOwnerTokenid( address nftContractAddress, uint256 _tokenid) public view returns (address) {
-                return NFT(nftContractAddress).getTokenCreatorById( _tokenid );
+    function getAddressOwnerTokenid(
+        address nftContractAddress,
+        uint256 _tokenid
+    ) public view returns (address) {
+        return NFT(nftContractAddress).getTokenCreatorById(_tokenid);
     }
 
     /**
@@ -236,7 +238,7 @@ contract Marketplace is ReentrancyGuard {
 
         uint256 indexType = 0;
         for (uint256 i = 0; i < NumberOfMarketItem; i++) {
-             MarketItem memory item = marketItemIdToMarketItem[i + 1];
+            MarketItem memory item = marketItemIdToMarketItem[i + 1];
             if (item._type != Type) continue;
             numberofTypeItem++;
         }

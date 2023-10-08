@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import useSigner from '../utils/ConnectWallet'
 
 export type NameProp = {
     name: string
@@ -12,11 +13,14 @@ const UpdateImage = ({name}: NameProp) => {
         isUpload(true)
     }
     
+    const { address } = useSigner();
+    const signerAddress = `${address?.substring(0,8)}...${address?.substring(35)}`
+
   return (
     <>
      {
          upload == false ?
-           <div className={` ${name == 'bg' ? '' : 'rounded-sm'} w-full h-full flex flex-col gap-2 bg-gray-800  justify-center items-center`}>
+           <div className={` ${name == 'bg' ? 'w-full h-full' : 'rounded-lg border-[5px] border-[#2FAEAC] w-[200px] h-[200px]'} flex flex-col gap-2 bg-gray-800  justify-center items-center`}>
                           <div className=' w-full justify-center flex items-center'>
                             <input onChange={(e) => updateURL(e)} type="file" className={` ${name == 'bg' ? 'w-[10%]' : 'w-[80%]' } text-white`} ></input>
                           </div>
@@ -24,8 +28,24 @@ const UpdateImage = ({name}: NameProp) => {
           </div>
           
           :
-          
-          <img src={url} alt="" className={`${name == 'bg' ? 'w-full h-full bg-no-repeat bg-center object-cover' : 'object-cover h-full rounded-sm' }`} />
+          <>
+            {
+              
+              name == "bg"
+              ?
+              <img src={url} alt="" className= 'w-full h-full bg-no-repeat bg-center object-cover' />
+              :
+              <>
+                <div className='w-[250px] h-[200px] rounded-lg border-[5px] border-[#2FAEAC]'>
+                  <img src={url} alt="" className={`${name == 'bg' ? 'w-full h-full bg-no-repeat bg-center object-cover' : 'object-cover h-full w-full rounded-sm' }`} />
+                </div>
+                <div className=' h-[50px] flex justify-center items-center rounded-xl bg-gradient-to-br from-[#E55D87] to-[#5FC3E4]'>
+                  <span className=' text-black font-bold text-3xl px-[10px] flex items-end'>{signerAddress}</span>
+                </div>
+
+              </>
+            }
+          </>
      }
     </>    
   )
