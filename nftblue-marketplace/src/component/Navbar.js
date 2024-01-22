@@ -1,17 +1,41 @@
 'use client'
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Link } from 'react-scroll'
 import Links from 'next/link'
 import ConnectMatamask from '../utils/ConnectMatamask'
 import 'ethers'
 import 'web3'
 import useSigner from '@/src/utils/ConnectWallet'
-import { useDispatch, useSelector } from "react-redux";
 import * as types from '../../scripts/types/types'
 import ConnectButton from './ConnectButton'
+import { NFTList } from '../pages/My_Collection/Create_NFT/NFTModal'
+import { useDispatch } from 'react-redux'
+import { updateListNFT } from '@/scripts/actions/UpdateListNFT'
+import { useRouter } from 'next/router'
+
 
 function Navbar() {
-  const {address} = useSigner()
+  const {address, myNFT} = useSigner()
+  const [nft, setNFTs] = useState([null])
+  const dispatch = useDispatch()
+  const router = useRouter()
+  
+  async function getNFTList() {
+    const nfts = await NFTList(myNFT)
+    dispatch(updateListNFT(nfts))
+    setNFTs(nfts)
+  }
+
+  const handleClick = () => {
+    router.push("/My_Collection")
+  }
+
+  useEffect(() => {
+    getNFTList()
+  },[address])
+
+  console.log('check', nft)
+
   return (
     <div className='w-[95%] flex justify-between text-white items-center'>
         <span className=' font-bold text-xl'>NFT&#39;Blue</span>
@@ -24,13 +48,14 @@ function Navbar() {
             {
               address != undefined 
               ?
-              <Links href="/My_Collection" className=' cursor-pointer'>Our Collection</Links>
+              <button onClick={() => handleClick()} className=' cursor-pointer'>Our Collection</button>
               : 
               ''
             }
         </div>
         <div className=' bg-white text-black rounded-2xl p-3 font-semibold hover:bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:text-[#75e94b]'>
           <ConnectButton/>
+          {/* <ConnectMatamask/> */}
         </div>
     </div>
   )

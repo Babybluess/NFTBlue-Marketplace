@@ -1,4 +1,5 @@
 import { Brand, Footer, Header, Interviews, NFT_Marketplace, NavBar, Roadmap, Transaction} from '../../component'
+import { fetchNFTData } from '@/src/utils/Data'
 
 const HomePage = () => {
   return (

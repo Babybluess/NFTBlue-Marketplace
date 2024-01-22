@@ -10,11 +10,15 @@ import {
 import Web3Modal from "web3modal";
 import { useDispatch, useSelector } from "react-redux";
 import * as types from '../../scripts/types/types'
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, Contract } from "ethers";
 import NFT from '../../artifacts/NFT.sol/NFT.json'
 import Markeplace from '../../artifacts/NFT-Marketplace.sol/Marketplace.json'
 import 'dotenv/config'
 require('dotenv').config()
+import Web3 from "web3";
+import { NFTList } from "../pages/My_Collection/Create_NFT/NFTModal";
+import { NFTInfor } from "./NFTModal";
+
 
 type SignerContextType = {
   signer?: JsonRpcSigner;
@@ -22,10 +26,21 @@ type SignerContextType = {
   balance?:string;
   network?:string;
   loading: boolean;
-  myNFT?: object;
-  NFTMarketplace?: object;
+  myNFT?: ethers.Contract;
+  NFTMarketplace?: ethers.Contract;
   connectWallet: () => Promise<void>;
+  nftCollection: NFTInfor[]
 };
+
+const initialNFT = {
+  name: '',
+  prize: 0,
+  type: '',
+  rareLevel: '',
+  description: '',
+  imgUrl: ''
+}
+
 
 const SignerContext = createContext<SignerContextType>({} as any);
 
@@ -38,8 +53,10 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
   const [balance, setBalance] = useState<string>();
   const [network, setNetWork] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [myNFT, setMyNFT] = useState<object>();
-  const [NFTMarketplace, setNFTMarketplace] = useState<object>();
+  const [myNFT, setMyNFT] = useState<ethers.Contract>();
+  const [NFTMarketplace, setNFTMarketplace] = useState<ethers.Contract>();
+  const [nftCollection, setNFTCollection] = useState<NFTInfor []>([initialNFT])
+
 
 
   useEffect(() => {
@@ -48,7 +65,7 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
     window.ethereum.on("accountsChanged", connectWallet);
   }, []);
 
-
+  
   const connectWallet = async () => {
       setLoading(true);
       try {
@@ -61,26 +78,36 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
           const balanceToEth = ethers.utils.formatEther(balance)
           const balanceFormat = balanceToEth.substring(0, 4)
           const networkType = provider.network.name;
-          const mynft = new ethers.Contract('0x7B7767E656f66d220121F80180EA9C51f4FFe4da', NFT.abi, signer)
-          const nftMarketplace = new ethers.Contract('0xC48B1a6DBE41972BDfc111Ea584aA80f01EDB683', Markeplace.abi, signer)
-          console.log("balaccetoEth", balanceFormat)
-          console.log("Network Type", networkType)
-          console.log("myNFT", mynft)
-          console.log("NFT Marketplce", nftMarketplace)
+          if( process.env.NEXT_PUBLIC_MY_NFT_ADDRESS !== undefined && process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS !== undefined) {
+
+            const mynft = new Contract(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS, NFT.abi, signer as any)
+            const nftMarketplace = new Contract(process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS, Markeplace.abi, signer as any)
+            setMyNFT(mynft)
+            setNFTMarketplace(nftMarketplace)
+          }
+
+          const nfts = await NFTList(myNFT)
+
+          // console.log('type of contract', typeof mynft)
+          // console.log("balaccetoEth", balanceFormat)
+          // console.log("Network Type", networkType)
+          // console.log("myNFT", mynft)
+          // console.log("NFT Marketplce", nftMarketplace)
+          console.log('nftcollection', nftCollection)
           
+          setNFTCollection(nfts)
           setSigner(signer);
           setAddress(address);
           setBalance(balanceFormat);
           setNetWork(networkType);
-          setMyNFT(mynft)
-          setNFTMarketplace(nftMarketplace)
         } catch (e) {
             console.log(e);
         }
         setLoading(false);
     };
+    
 
-    const contextValue = { signer, address, balance, network, loading, myNFT, NFTMarketplace, connectWallet };
+    const contextValue = { signer, address, balance, network, loading, myNFT, NFTMarketplace, connectWallet, nftCollection };
 
   return (
     <SignerContext.Provider value={contextValue}>

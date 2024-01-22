@@ -1,15 +1,81 @@
-'use client'
-import React, {useState} from 'react'
+// 'use client'
+"use strict";
+import React, {useEffect, useState} from 'react'
 import Select, { SingleValue } from 'react-select'
 import Link from 'next/link'
 import Layout from '@/src/component/Layout'
+import { NFTMetadata } from '@/src/utils/Pinata'
+import useSigner from '@/src/utils/ConnectWallet'
+import { useDispatch, useSelector } from 'react-redux'
+import { isLoadingNFT } from '@/scripts/actions/UpdateListNFT'
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { NFTList } from './NFTModal';
+import { updateListNFT } from '@/scripts/actions/UpdateListNFT';
+import { NFTInfor } from '@/src/utils/NFTModal';
+import { useRouter } from 'next/router';
+
 
 function page() {
-  const backClick = () =>{
-		window.location.href ='/My_Collection'
-	}
+  const [nameNFT, setNameNFT] = useState('')
+  const [urlNFT, setUrlNFT] = useState('')
+  const [urlNFTLocation, setUrlNFTLocation] = useState(null)
+  const [typeNFT, setTypeNFT] = useState('')
+  const [rareLevelNFT, setRareLevelNFT] = useState('')
+  const [descriptionNFT, setDecripstionNFT] = useState('')
 
+
+  const nftList = useSelector((state:any) => state.nftListReducer.myNFT)
+  const router = useRouter()
+
+  console.log('nftlist', nftList)
+
+  const dispatch = useDispatch()
+
+  const backClick = () =>{
+		router.back()
+	}
+  const {myNFT, NFTMarketplace, signer} = useSigner()
+  
+  const creatNewNFT = async () => {
+    if(myNFT != undefined && NFTMarketplace != undefined) {
+      try {
+        // const metadataNFT = await NFTMetadata(nameNFT, typeNFT, rareLevelNFT, descriptionNFT, urlNFTLocation)
+        // const newNFT = await myNFT.mintToken(metadataNFT);
+        // const nfts = await NFTList(myNFT)
+        // dispatch(updateListNFT(nfts))
+        
+        // dispatch(updateListNFT(nfts))
+        // if(NFTList !== undefined) {
+        // }
+        setNameNFT('')
+        setTypeNFT('')
+        setRareLevelNFT('')
+        setDecripstionNFT('')
+        setUrlNFT('')
+        toast.success('🦄 It is successfull NFT Creation!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+      })
+
+      router.back()
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+
+  console.log('nfts', nftList)
+  
   const NFTTypeoptions = [
+    {value: 'None', label: 'None'},
     {value : 'artNFT' ,  label: 'ArtNFT'},
     {value : 'abstractNFT' ,  label: 'AbstractNFT'},
     {value : 'gorillaNFT' ,  label: 'GorillaNFT'},
@@ -17,26 +83,20 @@ function page() {
   ]
 
   const rareLevels = [
+    {value: 'None', label: 'None'},
     {value: 'Limited', label:'Limited' },
     {value: 'Rare', label:'Rare'},
     {value: 'Common', label:'Common'}
   ]
 
-  const [name, setName] = useState('')
-  const [url, setUrl] = useState('')
-  const [selected, setSelected] = useState('')
+
 
   const updateURL = (e:any) => {
-    setUrl(URL.createObjectURL(e.target.files[0]))
-  }
-
-  const updateName = (e:any) => {
-    setName(e.target.value);
-  }
-  console.log(name);
-
-  const rareSelected = (e:any) => {
-    setSelected(e);
+    const image = e.target.files[0]
+    const nImage = URL.createObjectURL(e.target.files[0])
+    setUrlNFT(nImage)
+    setUrlNFTLocation(image)
+   
   }
 
   return (
@@ -47,7 +107,7 @@ function page() {
             <p onClick={() => backClick()} className=' hover:-translate-x-2  w-[40px] h-[40px] bg-[#E2EAB0] rounded-xl flex justify-center items-center'>&#8592;</p>
             <span className=' text-white font-bold text-3xl'>Create NFT Item</span>
           </div>
-          <div className=' w-[90%] flex gap-44'>
+          <div className=' w-[90%] max-lg:flex-col flex gap-44 max-lg:gap-20'>
             <section className=' flex flex-col gap-10'>
               <div className=' text-white flex flex-col gap-5'>
                 <span className='text-xl font-semibold'>Upload your NFT</span>
@@ -59,11 +119,11 @@ function page() {
                 </div>
               </div>
               <div className=' flex flex-col gap-10'>
-                  <div className=' flex gap-5'>
+                  <div className=' flex gap-5 max-md:flex-col'>
                     <div className=' flex flex-col gap-2' >
                       <label htmlFor="" className=' text-gray-300 text-xl'>Category</label>
                       <p className='text-gray-600 text-sm'>Select the category of your NFT</p>
-                      <Select options={NFTTypeoptions} placeholder='Choose NFT Type' styles={{control: (base, state) => ({
+                      <Select onChange={(e:any) => setTypeNFT(e?.value)} options={NFTTypeoptions} placeholder='Choose NFT Type' styles={{control: (base, state) => ({
                         ...base,
                         borderColor: state.isFocused ? 'grey' : 'gray',
                       })}} className='w-[350px]'/>
@@ -71,7 +131,7 @@ function page() {
                     <div className=' flex flex-col gap-2' >
                       <label htmlFor="" className=' text-gray-300 text-xl'>Rare Level</label>
                       <p className='text-gray-600 text-sm'>Select the category of your NFT</p>
-                      <Select onChange={(e) => rareSelected(e?.value)} options={rareLevels} placeholder='Choose Rare NFT Level' styles={{control: (base, state) => ({
+                      <Select onChange={(e:any) => setRareLevelNFT(e?.value)} options={rareLevels} placeholder='Choose Rare NFT Level' styles={{control: (base, state) => ({
                         ...base,
                         borderColor: state.isFocused ? 'grey' : 'gray',
                       })}} className='w-[350px]'/>
@@ -80,40 +140,41 @@ function page() {
                   <div className=' flex flex-col gap-2'>
                     <label htmlFor="" className=' text-gray-300 text-xl'>Name</label>
                     <p className='text-gray-600 text-sm'>Enter the name of your NFT</p>
-                    <input onChange={(e) => updateName(e)} type="text" placeholder='Enter the name of your NFT' className=' text-white bg-transparent border-[1px] px-2 h-[50px] w-[350px] valid:border-[#1a73e8] rounded-md' />
+                    <input onChange={(e) => setNameNFT(e.target.value)} type="text" placeholder='Enter the name of your NFT' className=' text-white bg-transparent border-[1px] px-2 h-[50px] w-[350px] valid:border-[#1a73e8] rounded-md' />
                   </div>
                   <div className=' flex flex-col gap-2'>
                     <label htmlFor="" className=' text-gray-300 text-xl'>Description</label>
                     <p className='text-gray-600 text-sm'>The description will be included on the Item's detail page.</p>
                     <div id="input-group">
-                        <input required type='text' id="inputCreate"/>
+                        <input required type='text' onChange={(e) => setDecripstionNFT(e.target.value)} id="inputCreate"/>
                         <label id="user-label">Enter details about the product</label>
                       </div>
                   </div>
               </div>
             </section>
-            <section className=' w-[550px] h-[500px] rounded-md flex justify-center items-center shadow-inner shadow-indigo-300'>
-            <div className=' w-[300px] gap-4 h-[450px] bg-[#1E1F28] rounded-lg justify-center items-center flex flex-col text-white shadow-inner shadow-indigo-600'>
+            <section className=' w-[550px] h-[600px] max-sm:w-[450px] rounded-md flex flex-col pb-5 gap-5 justify-center items-center shadow-inner shadow-indigo-300'>
+              <span className=' text-white text-3xl font-semibold'>Preview NFT</span>
+               <div className=' w-[300px] gap-4 h-[450px] bg-[#1E1F28] rounded-lg justify-center items-center flex flex-col text-white shadow-inner shadow-indigo-600'>
                       <div className=' w-[90%] h-[65%]'>
-                          <img src={url} alt="" className='shadow-xl shadow-indigo-500/50 w-[100%] h-[100%] rounded-lg object-cover' />
+                          <img src={urlNFT} alt="" className='shadow-xl shadow-indigo-500/50 w-[100%] h-[100%] rounded-lg object-cover' />
                       </div>
                       <div className=' w-[90%] flex flex-col gap-2 '>
-                          <span className=' text-xl font-medium'>{name}</span>
+                          <span className=' text-xl font-medium'>{nameNFT}</span>
                           <div className=' flex justify-between w-[100%]'>
                               {
-                                  selected === "Limited"
-                                  && <span className=' p-1 bg-yellow-500 rounded-xl'>{selected}</span>
+                                  rareLevelNFT === "Limited"
+                                  && <span className=' p-1 bg-yellow-500 rounded-xl'>{rareLevelNFT}</span>
                               }
                               {
-                                  selected === "Rare"
-                                  && <span className=' p-1 bg-violet-700 rounded-xl'>{selected}</span>
+                                  rareLevelNFT === "Rare"
+                                  && <span className=' p-1 bg-violet-700 rounded-xl'>{rareLevelNFT}</span>
                               }
                               {
-                                  selected === "Common"
-                                  && <span className=' p-1 bg-gray-500 rounded-xl'>{selected}</span>
+                                  rareLevelNFT === "Common"
+                                  && <span className=' p-1 bg-gray-500 rounded-xl'>{rareLevelNFT}</span>
                               }
                               {
-                                  selected === ""
+                                  rareLevelNFT === ""
                                   && <span className=' p-1 rounded-3xl'></span>
                               }
                               <div className=' flex gap-1'>
@@ -126,15 +187,30 @@ function page() {
                                   <img className=' rounded-3xl w-[30px] h-[30px] object-cover' src={'/images/desktop-wallpaper-nft-monkey.jpg'} alt="" />
                                   <span>You</span>
                               </div>
-                              <Link href={''} className=' p-2 bg-blue-600 rounded-xl'>Sell</Link>
+                              <span className=' p-2 bg-blue-600 rounded-xl'>InitialNFT</span>
                           </div>
                       </div>
                   </div>
+                  <button className='text-white font-semibold text-xl rounded-xl p-3 bg-blue-500' onClick={() => creatNewNFT()}>Create NFT</button>
             </section>
           </div>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition={Bounce}
+            />
       </div>
     </Layout>
   )
 }
 
 export default page
+

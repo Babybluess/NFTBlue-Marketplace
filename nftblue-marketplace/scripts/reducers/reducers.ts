@@ -1,12 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import orderReducer from "./orderReducer";
-import userReducer from "./userReducer";
+import nftListReducer from "./myNFTReducer";
+import { nftMarketplaceReducer } from "./nftMarketplaceReducer";
 
 const rootReducer = combineReducers({
-    userReducer,
-    orderReducer
+    nftMarketplaceReducer,
+    nftListReducer    
 });
-
-export type RootReducer = ReturnType<typeof rootReducer>;
 
 export default rootReducer;

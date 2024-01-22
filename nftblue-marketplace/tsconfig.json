@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/Signer.jx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/Signer.jx", "src/utils/Pinata.js", "src/utils/Web3Provider.js", "src/pages/My_Collection/Create_NFT/index.tsx", "src/pages/My_Collection/components/MyNFTList.js", "src/pages/My_Collection/index.js", "src/component/Navbar.js"],
   "exclude": ["node_modules"]
 }

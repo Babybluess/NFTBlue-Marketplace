@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import useSigner from '../utils/ConnectWallet'
+// import useSigner from '../utils/ConnectWallet'
 
 export type NameProp = {
     name: string
@@ -12,15 +12,12 @@ const UpdateImage = ({name}: NameProp) => {
         setUrl(URL.createObjectURL(e.target.files[0]))
         isUpload(true)
     }
-    
-    const { address } = useSigner();
-    const signerAddress = `${address?.substring(0,8)}...${address?.substring(35)}`
 
   return (
     <>
      {
          upload == false ?
-           <div className={` ${name == 'bg' ? 'w-full h-full' : 'rounded-lg border-[5px] border-[#2FAEAC] w-[200px] h-[200px]'} flex flex-col gap-2 bg-gray-800  justify-center items-center`}>
+           <div className={` ${name == 'bg' ? 'w-full h-full' : 'rounded-lg border-[5px] border-[#2FAEAC] w-[20%] max-lg:w-[25%] max-md:w-[35%] max-sm:w-[50%] h-full'} flex flex-col gap-2 bg-gray-800  justify-center items-center`}>
                           <div className=' w-full justify-center flex items-center'>
                             <input onChange={(e) => updateURL(e)} type="file" className={` ${name == 'bg' ? 'w-[10%]' : 'w-[80%]' } text-white`} ></input>
                           </div>
@@ -30,20 +27,13 @@ const UpdateImage = ({name}: NameProp) => {
           :
           <>
             {
-              
               name == "bg"
               ?
               <img src={url} alt="" className= 'w-full h-full bg-no-repeat bg-center object-cover' />
               :
-              <>
-                <div className='w-[250px] h-[200px] rounded-lg border-[5px] border-[#2FAEAC]'>
-                  <img src={url} alt="" className={`${name == 'bg' ? 'w-full h-full bg-no-repeat bg-center object-cover' : 'object-cover h-full w-full rounded-sm' }`} />
-                </div>
-                <div className=' h-[50px] flex justify-center items-center rounded-xl bg-gradient-to-br from-[#E55D87] to-[#5FC3E4]'>
-                  <span className=' text-black font-bold text-3xl px-[10px] flex items-end'>{signerAddress}</span>
-                </div>
-
-              </>
+              <div className='w-[20%] max-lg:w-[30%] max-md:w-[40%] max-sm:w-[50%] h-full rounded-lg border-[5px] border-[#2FAEAC]'>
+                <img src={url} alt="" className={`${name == 'bg' ? 'w-full h-full bg-no-repeat bg-center object-cover' : 'object-cover h-full w-full rounded-sm' }`} />
+              </div>
             }
           </>
      }
