@@ -1,7 +1,26 @@
 import { Brand, Footer, Header, Interviews, NFT_Marketplace, NavBar, Roadmap, Transaction} from '../../component'
-import { fetchNFTData } from '@/src/utils/Data'
+import { useDispatch, useSelector } from 'react-redux';
+import { MarketplaceList } from '@/src/pages/My_Collection/Create_NFT/NFTModal';
+import { useState } from 'react';
+import useSigner from '@/src/utils/ConnectWallet';
+import { UpdateListMarketplace } from '@/scripts/actions/UpdateListMarketplace';
 
 const HomePage = () => {
+  // const [marketplaceList, setMarketplaceList] = useState<any[]>([])
+  // const { NFTMarketplace} = useSigner()
+  // const dispatch = useDispatch()
+  // const marketList = useSelector((state:any) => state.nftMarketplaceReducer.NFTMarketplace)
+
+  // async function getMarketList() {
+  //   const data = await MarketplaceList(NFTMarketplace)
+  //   // setMarketplaceList(data) 
+  //   dispatch(UpdateListMarketplace(data))   
+  // }
+
+  // getMarketList()
+
+  // console.log(marketList)
+
   return (
       <div className=' min-h-screen w-full bg-black'>
         <div className=' h-[100px] border-b-2 border-gray-500 flex justify-center items-center'>
@@ -13,8 +32,8 @@ const HomePage = () => {
         <div id='brand-container' className=' h-[200px] flex justify-center items-center'>
           <Brand/>
         </div>
-        <div className=' h-[1400px] flex justify-center items-center'>
-          <NFT_Marketplace/>
+        <div className=' min-h-[850px] py-10 flex justify-center items-center'>
+          <NFT_Marketplace />
         </div>
         <div id='brand-container' className=' h-[650px] flex justify-center items-center'>
           <Roadmap/>

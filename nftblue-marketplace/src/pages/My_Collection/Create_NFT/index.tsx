@@ -28,26 +28,21 @@ function page() {
   const nftList = useSelector((state:any) => state.nftListReducer.myNFT)
   const router = useRouter()
 
-  console.log('nftlist', nftList)
-
   const dispatch = useDispatch()
 
   const backClick = () =>{
 		router.back()
 	}
-  const {myNFT, NFTMarketplace, signer} = useSigner()
+  const {myNFT, NFTMarketplace, signer, address, balance} = useSigner()
   
   const creatNewNFT = async () => {
     if(myNFT != undefined && NFTMarketplace != undefined) {
+      
       try {
-        // const metadataNFT = await NFTMetadata(nameNFT, typeNFT, rareLevelNFT, descriptionNFT, urlNFTLocation)
-        // const newNFT = await myNFT.mintToken(metadataNFT);
-        // const nfts = await NFTList(myNFT)
-        // dispatch(updateListNFT(nfts))
-        
-        // dispatch(updateListNFT(nfts))
-        // if(NFTList !== undefined) {
-        // }
+        const metadataNFT = await NFTMetadata(nameNFT, typeNFT, rareLevelNFT, descriptionNFT, urlNFTLocation)
+        const newNFT = await myNFT.mintToken(metadataNFT);
+        await newNFT.wait()
+        getMyNFTList()
         setNameNFT('')
         setTypeNFT('')
         setRareLevelNFT('')
@@ -63,16 +58,24 @@ function page() {
           progress: undefined,
           theme: "dark",
           transition: Bounce,
-      })
-
-      router.back()
+        })
+  
+        console.log('success')
+        
       } catch (e) {
         console.log(e)
       }
     }
   }
 
-  console.log('nfts', nftList)
+ 
+  async function getMyNFTList() {
+    const data = await NFTList(myNFT)
+    dispatch(updateListNFT(data))
+  }
+
+  console.log('balance', balance)
+
   
   const NFTTypeoptions = [
     {value: 'None', label: 'None'},

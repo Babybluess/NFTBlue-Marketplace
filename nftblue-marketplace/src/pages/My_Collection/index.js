@@ -15,14 +15,6 @@ import MyNFTList from './components/MyNFTList';
 import { useRouter } from 'next/router';
 import { NFTInfor } from '@/src/utils/NFTModal';
 
-// export const getServerSideProps = (async () => {
-//   const nfts : NFTInfor[] = await NFTList(myNFT)
-//   console.log('mam', nfts)
-// // Pass data to the page via props
-// return { props: { nfts } }
-// }) satisfies GetServerSideProps<{ nfts : NFTInfor[] }>
-
-
 
 function MyCollection() {
 
@@ -30,12 +22,12 @@ function MyCollection() {
   const nftList = useSelector((state) => state.nftListReducer.myNFT)
   const router = useRouter()
 
-    const { address, myNFT, nftCollection} = useSigner()
+    const { address, myNFT, NFTMarketplace} = useSigner()
     const signerAddress = `${address?.substring(0,8)}...${address?.substring(35)}`
 
     console.log('router', typeof nftList)
     
-    console.log('nftList', nft)
+    console.log('nftList', NFTMarketplace)
 
   const backClick = () =>{
     router.back()
@@ -60,7 +52,7 @@ function MyCollection() {
             <Link href='/My_Collection/Create_NFT' className='p-3 border-2 rounded-md hover:bg-gradient-to-r hover:from-[#ddd6f3] hover:to-[#faaca8]'>Create NFT</Link>
           </div>
           <div className='w-[100%] flex flex-wrap gap-[50px]'>
-                <MyNFTList nftList={nftList} signerAddress={signerAddress} />
+                <MyNFTList nftList={nftList} nftMarketplace={NFTMarketplace} myNFT={myNFT} signerAddress={signerAddress} address={address}/>
           </div>
         </div>
       </div>

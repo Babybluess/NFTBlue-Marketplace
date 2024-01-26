@@ -16,8 +16,6 @@ import Markeplace from '../../artifacts/NFT-Marketplace.sol/Marketplace.json'
 import 'dotenv/config'
 require('dotenv').config()
 import Web3 from "web3";
-import { NFTList } from "../pages/My_Collection/Create_NFT/NFTModal";
-import { NFTInfor } from "./NFTModal";
 
 
 type SignerContextType = {
@@ -29,7 +27,6 @@ type SignerContextType = {
   myNFT?: ethers.Contract;
   NFTMarketplace?: ethers.Contract;
   connectWallet: () => Promise<void>;
-  nftCollection: NFTInfor[]
 };
 
 const initialNFT = {
@@ -55,7 +52,6 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [myNFT, setMyNFT] = useState<ethers.Contract>();
   const [NFTMarketplace, setNFTMarketplace] = useState<ethers.Contract>();
-  const [nftCollection, setNFTCollection] = useState<NFTInfor []>([initialNFT])
 
 
 
@@ -78,25 +74,17 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
           const balanceToEth = ethers.utils.formatEther(balance)
           const balanceFormat = balanceToEth.substring(0, 4)
           const networkType = provider.network.name;
-          if( process.env.NEXT_PUBLIC_MY_NFT_ADDRESS !== undefined && process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS !== undefined) {
-
-            const mynft = new Contract(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS, NFT.abi, signer as any)
-            const nftMarketplace = new Contract(process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS, Markeplace.abi, signer as any)
+          if( process.env.NEXT_PUBLIC_MY_NFT_ADDRESS !== undefined && process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS !== undefined) { 
+            const mynft = new Contract(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS, NFT.abi, signer )
+            const nftMarketplace = new Contract(process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS, Markeplace.abi, signer)
             setMyNFT(mynft)
-            setNFTMarketplace(nftMarketplace)
-          }
-
-          const nfts = await NFTList(myNFT)
-
-          // console.log('type of contract', typeof mynft)
-          // console.log("balaccetoEth", balanceFormat)
-          // console.log("Network Type", networkType)
-          // console.log("myNFT", mynft)
-          // console.log("NFT Marketplce", nftMarketplace)
-          console.log('nftcollection', nftCollection)
+            setNFTMarketplace(nftMarketplace)           
+            }
+            
           
-          setNFTCollection(nfts)
-          setSigner(signer);
+            
+            setSigner(signer);
+            console.log('signer', signer)
           setAddress(address);
           setBalance(balanceFormat);
           setNetWork(networkType);
@@ -107,7 +95,7 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
     };
     
 
-    const contextValue = { signer, address, balance, network, loading, myNFT, NFTMarketplace, connectWallet, nftCollection };
+    const contextValue = { signer, address, balance, network, loading, myNFT, NFTMarketplace, connectWallet };
 
   return (
     <SignerContext.Provider value={contextValue}>

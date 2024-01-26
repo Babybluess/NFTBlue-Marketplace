@@ -1,6 +1,6 @@
 import * as types from '../types/types'
 
-export const UpdateListMarketplace = (nft: string) => ({
+export const UpdateListMarketplace = (nft: any[]) => ({
     type: 'UPDATELISTMARKETPLACE',
     NFTMarketplace: nft
 })
