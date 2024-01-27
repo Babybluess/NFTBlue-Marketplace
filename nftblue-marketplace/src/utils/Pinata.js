@@ -3,10 +3,6 @@ const pinataSDK = require('@pinata/sdk');
 const pinata = new pinataSDK(process.env.NEXT_PUBLIC_PINATA_API_KEY, process.env.NEXT_PUBLIC_PINATA_API_SECRET);
 const fs = require('fs') 
 import axios from 'axios';
-import useSigner from './ConnectWallet';
-
-
-
 
 export const NFTMetadata = async(nameNFT, typeNFT, rareLevelNFT, descriptionNFT, urlNFTLocation) => {
 
@@ -35,17 +31,7 @@ export const NFTMetadata = async(nameNFT, typeNFT, rareLevelNFT, descriptionNFT,
     return res.IpfsHash
 }
 
-
-const pinataConfig = {
-    root: `https://${process.env.NEXT_PUBLIC_PINATA_DOMAIN}`,
-    headers: {
-      'pinata_api_key': process.env.NEXT_PUBLIC_PINATA_API_KEY,
-      'pinata_secret_api_key': process.env.NEXT_PUBLIC_PINATA_API_SECRET
-    }
-  };
-
-
-  const handleUpload = async (nameNFT, urlNFTLocation) => {
+export const handleUpload = async (nameNFT, urlNFTLocation) => {
     try {
       if (urlNFTLocation !== null) {
         const formData = new FormData();
@@ -88,4 +74,12 @@ export const queryPinataFiles = async (ipfsHash) => {
       console.log(error)
     }
   };
+
+const pinataConfig = {
+  root: `https://${process.env.NEXT_PUBLIC_PINATA_DOMAIN}`,
+  headers: {
+    'pinata_api_key': process.env.NEXT_PUBLIC_PINATA_API_KEY,
+    'pinata_secret_api_key': process.env.NEXT_PUBLIC_PINATA_API_SECRET
+  }
+};
 

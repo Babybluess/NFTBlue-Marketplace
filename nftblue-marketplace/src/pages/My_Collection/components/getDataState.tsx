@@ -3,11 +3,7 @@ import { NFTList } from '../Create_NFT/NFTModal'
 import { NFTInfor } from '@/src/utils/NFTModal'
 import useSigner from '@/src/utils/ConnectWallet'
  
-// type Repo = {
-//   name: string
-//   stargazers_count: number
-// }
- 
+
 export const getServerSideProps = (async () => {
     const {myNFT, NFTMarketplace, signer} = useSigner()
     const nfts : NFTInfor[] = await NFTList(myNFT)
