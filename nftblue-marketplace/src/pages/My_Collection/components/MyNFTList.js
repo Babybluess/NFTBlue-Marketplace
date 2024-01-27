@@ -8,6 +8,8 @@ import axios from 'axios';
 import { NFTMarketplace } from '../Create_NFT/NFTModal';
 import { ethers } from "ethers";
 import { MarketplaceList } from '../Create_NFT/NFTModal';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function MyNFTList({nftList , nftMarketplace, myNFT, signerAddress, address}) {
 
@@ -27,13 +29,24 @@ function MyNFTList({nftList , nftMarketplace, myNFT, signerAddress, address}) {
 
     const sellNFT = async() => {
         if(nftMarketplace !== undefined) {
-            await myNFT.approve(process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS, ID)
             try {
                 const cost = ethers.utils.parseUnits(price, 'ether')
-                const marketItemID = await nftMarketplace.createMarketItem(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS, ID, cost , 0)
+                const listingFee = await nftMarketplace.getListingFee()
+                await myNFT.approve(process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS, ID)
+                const marketItemID = await nftMarketplace.createMarketItem(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS, ID, cost , 0, { value: listingFee.toString() })
                 await marketItemID.wait()
                 getMarketList()
-               
+                toast.success('🦄 It is successfull NFT Selling!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    transition: Bounce,
+                  })
 
             } catch (e) {
                 console.log(e)
@@ -119,6 +132,19 @@ function MyNFTList({nftList , nftMarketplace, myNFT, signerAddress, address}) {
               )
          }
         </InfiniteScroll>
+        <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition={Bounce}
+            />
  </> 
   )
 }

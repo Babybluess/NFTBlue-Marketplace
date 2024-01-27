@@ -30,8 +30,10 @@ export const MarketplaceList = async(NFTMarketplace) => {
                     const priceWei = utils.hexToNumberString(element.price._hex)
                     const priceEther = utils.fromWei(priceWei, 'ether');
                     const nft = {
+                        id: utils.hexToNumberString(element.marketItemId._hex),
+                        name: element.name,
                         data: nftData.data,
-                        seller: `${element.seller?.substring(0,8)}...${element.seller?.substring(35)}`,
+                        seller: element.seller,
                         price: priceEther
                     }
                     data.push(nft)

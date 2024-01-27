@@ -9,8 +9,7 @@ function NFT_Marketplace() {
 const marketplaceList = useSelector((state) => state.nftMarketplaceReducer.NFTMarketplace)
 const [NFTdata,setData] = useState(marketplaceList)
 const [loading, isloading] = useState(false)
-
-const { address, myNFT, NFTMarketplace} = useSigner()
+const { address, myNFT, NFTMarketplace, balance} = useSigner()
 
 useEffect(() => {
     setTimeout(() => {
@@ -53,6 +52,12 @@ const changeNFT = (index) => {
     }
 }
 
+const click = () => {
+
+ 
+}
+
+
 console.log('update data', NFTdata)
 console.log(' data', marketplaceList)
 
@@ -60,7 +65,7 @@ console.log(' data', marketplaceList)
     <div id='nft_marketplace' className=' w-[90%] flex flex-col gap-10 justify-center items-center text-white'>
         <div className=' w-[100%] flex justify-between'>
             <div className='flex w-[32%] justify-center items-center'>
-                <p className=' text-3xl font-bold'>POPULAR COLLECTION NFT DIGITAL ART</p>
+                <p onClick={() => click()} className=' text-3xl font-bold'>POPULAR COLLECTION NFT DIGITAL ART</p>
                 <div className=' w-[150px] h-[100px] justify-start flex items-start animate-pulse'>
                     <img src='/images/Uranus_Crypto_Card_-_Rarible___OpenSea-removebg-preview.png' alt='' className=' object-cover'/>
                 </div>
@@ -79,8 +84,8 @@ console.log(' data', marketplaceList)
                 <button onClick={() => changeNFT(5)} className=' p-2 border-2 border-[#AAA1B6] rounded-xl'>Monkey</button>
             </div>
         </div>
-        <div className=' w-[100%] flex flex-wrap gap-[50px]'>
-            <MarketList NFTdata={NFTdata}/>
+        <div className=' w-full flex flex-wrap gap-[50px]'>
+            <MarketList NFTdata={NFTdata} nftMarketplace={NFTMarketplace} address={address} balance={balance}/>
         </div>
     </div>
   )

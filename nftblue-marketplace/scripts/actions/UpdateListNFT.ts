@@ -10,3 +10,4 @@ export const isLoadingNFT = (e: boolean) => ({
     isLoading: e
 })
 
+
