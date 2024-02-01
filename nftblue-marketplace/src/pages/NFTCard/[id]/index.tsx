@@ -6,9 +6,10 @@ import type { InferGetServerSidePropsType, GetServerSideProps, GetStaticProps  }
 import useSigner from '@/src/utils/ConnectWallet'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { utils } from 'web3';
 import Web3 from 'web3'
+import { utils } from 'web3';
 import { ethers } from 'ethers'
+import { eth } from 'web3'
 
 type nftData = {
   nftID: string|string[]|undefined
@@ -49,12 +50,13 @@ function NFT_Card( { nftModal } : InferGetServerSidePropsType<typeof getServerSi
 	}
 
   const buyNFT = async() => {
-    if(NFTMarketplace !== undefined) {
+    if(NFTMarketplace !== undefined && nftModal.price != undefined) {
       const priceBN = ethers.utils.parseUnits(nftModal.price.toString(), 'ether')
       const saleNFT = await NFTMarketplace.createMarketSale(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS, nftModal.idNFT, {
         value: priceBN
       })
       await saleNFT.wait()
+      console.log('saleFT', saleNFT)
       toast.success('🦄 It is successfull NFT Buying!', {
         position: "top-right",
         autoClose: 5000,

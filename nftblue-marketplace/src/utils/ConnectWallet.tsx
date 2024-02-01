@@ -15,8 +15,9 @@ import NFT from '../../artifacts/NFT.sol/NFT.json'
 import Markeplace from '../../artifacts/NFT-Marketplace.sol/Marketplace.json'
 import 'dotenv/config'
 require('dotenv').config()
-import Web3 from "web3";
-
+import web3 from "web3";
+import { eth } from "web3";
+import { utils } from "web3";
 
 type SignerContextType = {
   signer?: JsonRpcSigner;
@@ -27,6 +28,7 @@ type SignerContextType = {
   myNFT?: ethers.Contract;
   NFTMarketplace?: ethers.Contract;
   connectWallet: () => Promise<void>;
+  listAccount?: string[];
 };
 
 const initialNFT = {
@@ -35,7 +37,8 @@ const initialNFT = {
   type: '',
   rareLevel: '',
   description: '',
-  imgUrl: ''
+  imgUrl: '',
+  listAccount: []
 }
 
 
@@ -52,7 +55,7 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [myNFT, setMyNFT] = useState<ethers.Contract>();
   const [NFTMarketplace, setNFTMarketplace] = useState<ethers.Contract>();
-
+  const [listAccount, setListAccount] = useState<string[]>()
 
 
   useEffect(() => {
@@ -81,13 +84,25 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
             setNFTMarketplace(nftMarketplace)           
             }
             
+            // if(process.env.NEXT_PUBLIC_NFT_MARKETPLACE_ADDRESS !== undefined && process.env.NEXT_PUBLIC_MY_NFT_ADDRESS !== undefined) {
+            //   const txCount = await provider.getTransactionCount(address) 
+            //   const blockCount = await signer.getTransactionCount()
+            //   for(let x = 0; x < txCount; x++) {
+            //   }
+            //   const block = await provider.getBlock(5169034)
+            //   const transactionCount = await provider.getTransactionReceipt(process.env.NEXT_PUBLIC_MY_NFT_ADDRESS)
+            //   console.log('signer', transactionCount)
+            //   const tx = await provider.getTransaction('0x8201e620ee13cb78094670f18c8f8453f739038e897d8568fcef7ed1995c15c0')
+            //   const inter = new ethers.utils.Interface(Markeplace.abi);  
+            //   const decodedInput = inter.parseTransaction({ data: tx.data, value: tx.value});
+            // }
+          const listAccount = await provider.listAccounts()
           
-            
-            setSigner(signer);
-            console.log('signer', signer)
+          setSigner(signer);
           setAddress(address);
           setBalance(balanceFormat);
           setNetWork(networkType);
+          setListAccount(listAccount)
         } catch (e) {
             console.log(e);
         }
@@ -95,7 +110,7 @@ export const SignerProvider = ({ children }: { children: ReactNode }) => {
     };
     
 
-    const contextValue = { signer, address, balance, network, loading, myNFT, NFTMarketplace, connectWallet };
+    const contextValue = { signer, address, balance, network, loading, myNFT, NFTMarketplace, connectWallet, listAccount };
 
   return (
     <SignerContext.Provider value={contextValue}>

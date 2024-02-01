@@ -1,14 +1,6 @@
 import { Brand, Footer, Header, Interviews, NFT_Marketplace, NavBar, Roadmap, Transaction} from '../../component'
-import { useDispatch, useSelector } from 'react-redux';
-import { MarketplaceList } from '@/src/pages/My_Collection/Create_NFT/NFTModal';
-import { useEffect, useState } from 'react';
-import useSigner from '@/src/utils/ConnectWallet';
-import { UpdateListMarketplace } from '@/scripts/actions/UpdateListMarketplace';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
-import { isLoadingMarketplace } from '@/scripts/actions/UpdateListMarketplace';
 
 const HomePage = () => {
-
   return (
       <div className=' min-h-screen w-full bg-black'>
         <div className=' h-[100px] border-b-2 border-gray-500 flex justify-center items-center'>

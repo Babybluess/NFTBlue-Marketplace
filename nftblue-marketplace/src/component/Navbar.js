@@ -6,16 +6,18 @@ import ConnectMatamask from '../utils/ConnectMatamask'
 import 'ethers'
 import 'web3'
 import useSigner from '@/src/utils/ConnectWallet'
-import * as types from '../../scripts/types/types'
 import ConnectButton from './ConnectButton'
 import { NFTList } from '../pages/My_Collection/Create_NFT/NFTModal'
 import { useDispatch } from 'react-redux'
 import { updateListNFT } from '@/scripts/actions/UpdateListNFT'
 import { useRouter } from 'next/router'
-
+import Web3 from 'web3'
+import { listAccountDetail } from '../pages/My_Collection/Create_NFT/NFTModal'
 
 function Navbar() {
-  const {address, myNFT} = useSigner()
+  
+  const {address, myNFT, listAccount} = useSigner()
+
   const [nft, setNFTs] = useState([null])
   const dispatch = useDispatch()
   const router = useRouter()
@@ -35,6 +37,7 @@ function Navbar() {
   },[address])
 
   console.log('check', nft)
+
 
   return (
     <div className='w-[95%] flex justify-between text-white items-center'>

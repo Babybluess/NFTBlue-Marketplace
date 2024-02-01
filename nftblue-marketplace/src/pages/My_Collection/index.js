@@ -20,7 +20,7 @@ function MyCollection() {
   const router = useRouter()
   const dispatch = useDispatch()
 
-    const { address, myNFT, NFTMarketplace} = useSigner()
+    const { address, myNFT, NFTMarketplace, listAccount} = useSigner()
     const signerAddress = `${address?.substring(0,8)}...${address?.substring(35)}`
 
     console.log('router', typeof nftList)
@@ -59,7 +59,7 @@ function MyCollection() {
             <Link href='/My_Collection/Create_NFT' className='p-3 border-2 rounded-md hover:bg-gradient-to-r hover:from-[#ddd6f3] hover:to-[#faaca8]'>Create NFT</Link>
           </div>
           <div className='w-[100%] flex flex-wrap gap-[50px]'>
-                <MyNFTList nftList={nftList} nftMarketplace={NFTMarketplace} myNFT={myNFT} signerAddress={signerAddress} address={address}/>
+                <MyNFTList nftList={nftList} nftMarketplace={NFTMarketplace} myNFT={myNFT} signerAddress={signerAddress} address={address} listAccount={listAccount}/>
           </div>
         </div>
       </div>
