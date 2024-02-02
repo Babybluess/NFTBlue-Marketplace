@@ -60,6 +60,9 @@ function page() {
           transition: Bounce,
         })
   
+        setTimeout(() => {
+          router.push('/')
+        }, 6000)
         console.log('success')
         
       } catch (e) {
